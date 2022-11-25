@@ -1,35 +1,59 @@
 const db = require("../models");
-const Todo = db.todos;
+const Member = db.member;
 const Op = db.Sequelize.Op;
 
+// Find a single Todo with an id
+exports.findOne = (req, res) => {
+  console.log('james lu');
+  console.log(req);
+  const id = req.params.id;
+
+  Member.findByPk(id)
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find Member with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving Member with id=" + id
+      });
+    });
+};
+
+/*
 // Create and Save a new Todo
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
+  res.send(data);
+  // // Create a Todo
+  // const todo = {
+  //   title: req.body.title,
+  //   description: req.body.description,
+  //   stauts: req.body.stauts ? req.body.stauts : false
+  // };
 
-  // Create a Todo
-  const todo = {
-    title: req.body.title,
-    description: req.body.description,
-    stauts: req.body.stauts ? req.body.stauts : false
-  };
-
-  // Save Todo in the database
-  Todo.create(todo)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Todo."
-      });
-    });
+  // // Save Todo in the database
+  // Todo.create(todo)
+  //   .then(data => {
+  //     res.send(data);
+  //   })
+  //   .catch(err => {
+  //     res.status(500).send({
+  //       message:
+  //         err.message || "Some error occurred while creating the Todo."
+  //     });
+  //   });
 };
 
 // Retrieve all Todos from the database.
@@ -45,27 +69,6 @@ exports.findAll = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving todos."
-      });
-    });
-};
-
-// Find a single Todo with an id
-exports.findOne = (req, res) => {
-  const id = req.params.id;
-
-  Todo.findByPk(id)
-    .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find Todo with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error retrieving Todo with id=" + id
       });
     });
 };
@@ -150,3 +153,4 @@ exports.findAllstauts = (req, res) => {
       });
     });
 };
+*/

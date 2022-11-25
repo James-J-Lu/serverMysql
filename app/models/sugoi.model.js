@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Todo = sequelize.define("todo", {
+    const Sugoi = sequelize.define("sugoi", {
       title: {
         type: Sequelize.STRING
       },
@@ -11,5 +11,5 @@ module.exports = (sequelize, Sequelize) => {
       }
     });
   
-    return Todo;
+    return Sugoi;
   };

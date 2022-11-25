@@ -1,5 +1,5 @@
 module.exports = {
-    HOST: "192.168.1.5",
+    HOST: "localhost",
     USER: "root",
     PASSWORD: "SE2022group9",
     DB: "DogWeb",
