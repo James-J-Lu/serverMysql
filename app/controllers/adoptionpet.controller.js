@@ -60,14 +60,19 @@ exports.findOne = (req, res) => {
 // Retrieve all Adoptionpets from the database.
 exports.findAll = (req, res) => {
 
-  const memberid = req.params.id;
-  var condition = memberid ? { memberId_ap: memberid } : null;
+  Object.entries(req.body).forEach((obj) => {
+    if(obj[1] == 0)
+      delete req.body[obj[0]]
+  })
+  console.log(req.body)
+  var condition = req.body;
 
   Adoptionpet.findAll({ where: condition })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
+      console.log(err)
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving Adoptionpets."
@@ -79,21 +84,13 @@ exports.findAll = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  const _adoptionpet_ = {
-    adoptionpetAccount: req.body.account,
-    adoptionpetPw: req.body.pw,
-    adoptionpetName: req.body.name
-  };
-
-  Adoptionpet.update(_adoptionpet_, {
-    where: { id: id }
+  Adoptionpet.update(req.body, {
+    where: { adoPetId: id }
   })
     .then(num => {
       if (num == 1) {
         console.log(1);
-        res.send({
-          message: "Adoptionpet was updated successfully."
-        });
+        res.send('success');
       } else {
         console.log(0);
         res.send({

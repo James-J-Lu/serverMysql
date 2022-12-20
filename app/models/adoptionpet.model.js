@@ -39,6 +39,9 @@ module.exports = (sequelize, Sequelize) => {
       adoPetInfo: {
         type: Sequelize.STRING
       },
+      status: {
+        type: Sequelize.INTEGER
+      },
     });
   
     return Adoptionpet;

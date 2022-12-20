@@ -6,6 +6,7 @@ module.exports = app => {
     const roominfo = require("../controllers/roominfo.controller.js");
     const nurserypetorder = require("../controllers/nurserypetorder.controller.js")
     const adoptionorder = require("../controllers/adoptionorder.controller.js")
+    const reserveroom = require("../controllers/reserveroom.controller.js")
   
     var router = require("express").Router();
     // Retrieve all member
@@ -41,9 +42,9 @@ module.exports = app => {
 
 // adoptionPet 被領養的狗狗
     // 找出所有狗狗，defaultMain, adoptMain
+    router.post("/adoptionpet/prefer", adoptionpet.findAll);
+    // 找出所有狗狗，defaultMain, adoptMain
     router.get("/adoptionpet/", adoptionpet.findAll);
-    // Retrieve a single memberpet with id
-    router.get("/adoptionpet/:id", adoptionpet.findOne);
     // Create a new memberpet
     router.post("/adoptionpet/", adoptionpet.create);
     // Update a memberpet with id
@@ -51,13 +52,14 @@ module.exports = app => {
 
 // 房間資訊，管理者房間，可能會用在托兒訂單
     // Retrieve all roominfo
-    router.get("/roominfo/", roominfo.findAll);
+    router.post("/roominfo/", roominfo.findAll);
     // Retrieve a single memberpet with id
     router.get("/roominfo/:id", roominfo.findOne);
     // Create a new memberpet
     router.post("/roominfo/", roominfo.create);
     // Update a memberpet with id
     router.put("/roominfo/:id", roominfo.update);
+    
 
 // 房間資訊，管理者房間，可能會用在托兒訂單
     // Retrieve all roominfo
@@ -78,6 +80,16 @@ module.exports = app => {
     router.put("/adoptionorder/:id", adoptionorder.update);
     // 用member_id取得領養資料
     router.get("/adoptionorder/MID/:id", adoptionorder.findAll);
+
+// 房間資訊，管理者房間，可能會用在托兒訂單
+    // Retrieve all roominfo
+    router.get("/reserveroom/", reserveroom.findAll);
+    // Create a new memberpet
+    router.post("/reserveroom/", reserveroom.create);
+    // Update a memberpet with id
+    router.put("/reserveroom/:id", reserveroom.update);
+    // Get 全部時間某size房間在那些時間>總量
+    router.post("/reserveroom/test", reserveroom.test);
     
     /*
     // Retrieve all published member

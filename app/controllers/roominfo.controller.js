@@ -59,13 +59,15 @@ exports.findOne = (req, res) => {
 
 // Retrieve all Roominfos from the database.
 exports.findAll = (req, res) => {
-
-  const memberid = req.params.id;
-  var condition = memberid ? { memberId_ap: memberid } : null;
+  
+  var condition = req.body;
+  console.log(req.body)
 
   Roominfo.findAll({ where: condition })
     .then(data => {
-      res.send(data);
+      var len = data.length.toString()
+      console.log(len)
+      res.send(len);
     })
     .catch(err => {
       res.status(500).send({

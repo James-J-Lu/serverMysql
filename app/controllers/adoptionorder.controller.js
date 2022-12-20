@@ -13,26 +13,42 @@ exports.create = (req, res) => {
     return;
   }
 
-  // Create a Adoptionorder
-  const _adoptionorder_ = {
-    id: req.body.id,
-    adoptionorderAccount: req.body.account,
-    adoptionorderPw: req.body.pw,
-    adoptionorderName: req.body.name
-  };
-  
-  // Save Adoptionorder in the database
-  Adoptionorder.create(_adoptionorder_)
+  function incrementNumberInString(input) {
+    var number = parseInt(input.trim().match(/\d+$/), 10),
+        letter = input.trim().match(/^[A-Za-z]/)[0];
+    number++;
+    number = '000'.substring(0, '000'.length - number.toString().length) + number;
+    return letter + number.toString();
+  }
+
+  console.log(req.body)
+
+  Adoptionorder.findAll({ order:[['adoptionOrderId', 'DESC']],limit:1 })
     .then(data => {
-      res.send(data);
+      if(data.length == 0)
+        req.body.adoptionOrderId = 'AO0001';
+      else
+        req.body.adoptionOrderId = incrementNumberInString(data[0].adoptionOrderId);
+      
+      Adoptionorder.create(req.body)
+        .then(data => {
+          res.send('success');
+        })
+        .catch(err => {
+          console.log(err + '37')
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the Adoptionorder."
+          });
+        });
     })
     .catch(err => {
+      console.log(err + '45')
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Adoptionorder."
+          err.message || "Some error occurred while retrieving Members."
       });
     });
-  
 };
 
 // Retrieve all Adoptionorders from the database.

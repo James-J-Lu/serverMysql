@@ -14,10 +14,12 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
       },
       appointmentTime: {
-        type: 'TIMESTAMP',
+        type: 'DATETIME',
+        allowNull: false,
       },
       status: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
     });
   

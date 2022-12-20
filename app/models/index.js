@@ -33,6 +33,7 @@ db.adoptionpet = require("./adoptionpet.model.js")(sequelize, Sequelize);
 db.roominfo = require("./roominfo.model.js")(sequelize, Sequelize);
 db.nurserypetorder = require("./nurserypetorder.model.js")(sequelize, Sequelize);
 db.adoptionorder = require("./adoptionorder.model.js")(sequelize, Sequelize);
+db.reserveroom = require("./reserveroom.model.js")(sequelize, Sequelize);
 
 // froeign key
 // db.member.hasOne(db.adoption, {
