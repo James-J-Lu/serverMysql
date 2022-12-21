@@ -11,7 +11,7 @@ https://dev.mysql.com/downloads/installer/
 https://nodejs.org/en/
 ## install dependencies
 ```
-npm install express sequelize mysql2 body-parser cors --save
+npm install
 ```
 ## run server
 ```
