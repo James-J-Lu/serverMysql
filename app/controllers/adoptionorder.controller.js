@@ -54,8 +54,7 @@ exports.create = (req, res) => {
 // Retrieve all Adoptionorders from the database.
 exports.findAll = (req, res) => {
 
-  const memberid = req.params.id;
-  var condition = memberid ? { memberId_NPO: memberid } : null;
+  var condition = { memberId_AO: req.params.id };
 
   Adoptionorder.findAll({ where: condition })
     .then(data => {
@@ -65,6 +64,7 @@ exports.findAll = (req, res) => {
         res.send('nothing')
     })
     .catch(err => {
+      console.log(err)
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving Adoptionorders."

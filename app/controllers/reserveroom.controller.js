@@ -28,6 +28,7 @@ exports.test = (req, res) => {
 
         for(var i = 0; i < NotCheckout.length; i++) {
             var time1 = NotCheckout[i].startTime
+
             while(time1 <= NotCheckout[i].endTime) {
                 if(!Timelist[time1])
                     Timelist[time1] = 1
@@ -51,16 +52,35 @@ exports.create = (req, res) => {
     });
     return;
   }
+
+  function incrementNumberInString(input) {
+    var number = parseInt(input.trim().match(/\d+$/), 10)
+    number++;
+    number = '0000'.substring(0, '0000'.length - number.toString().length) + number;
+    return 'RR' + number.toString();
+  }
   
-  // Save Reserveroom in the database
-  Reserveroom.create(req.body)
+  Reserveroom.findAll({ order:[['reserveId', 'DESC']],limit:1 })
     .then(data => {
-      res.send(data);
-    })
+      if(data.length == 0)
+        req.body.reserveId = 'RR0001';
+      else
+        req.body.reserveId = incrementNumberInString(data[0].reserveId);
+      console.log(req.body)
+      Reserveroom.create(req.body)
+        .then(data => {
+          res.send('success');
+        })
+        .catch(err => {
+          console.log(err + '38')
+          res.send('fail');
+        });
+      })
     .catch(err => {
+      console.log(err + '46')
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Reserveroom."
+          err.message || "Some error occurred while retrieving Members."
       });
     });
   
@@ -108,28 +128,16 @@ exports.findAll = (req, res) => {
 
 // Update a Reserveroom by the id in the request
 exports.update = (req, res) => {
-  const id = req.params.id;
+  var condition = { orderId: req.params.id }
 
-  const _reserveroom_ = {
-    reserveroomAccount: req.body.account,
-    reserveroomPw: req.body.pw,
-    reserveroomName: req.body.name
-  };
-
-  Reserveroom.update(_reserveroom_, {
-    where: { id: id }
+  Reserveroom.update(req.body, {
+    where: condition
   })
     .then(num => {
       if (num == 1) {
-        console.log(1);
-        res.send({
-          message: "Reserveroom was updated successfully."
-        });
+        res.send('success');
       } else {
-        console.log(0);
-        res.send({
-          message: `Cannot update Reserveroom with id=${id}. Maybe Reserveroom was not found or req.body is empty!`
-        });
+        res.send('fail');
       }
     })
     .catch(err => {

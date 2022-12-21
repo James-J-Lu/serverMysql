@@ -45,6 +45,8 @@ module.exports = app => {
     router.post("/adoptionpet/prefer", adoptionpet.findAll);
     // 找出所有狗狗，defaultMain, adoptMain
     router.get("/adoptionpet/", adoptionpet.findAll);
+    // Retrieve a single memberpet with id
+    router.get("/adoptionpet/:id", adoptionpet.findOne);
     // Create a new memberpet
     router.post("/adoptionpet/", adoptionpet.create);
     // Update a memberpet with id
@@ -65,7 +67,7 @@ module.exports = app => {
     // Retrieve all roominfo
     router.get("/nurserypetorder/", nurserypetorder.findAll);
     // Create a new memberpet
-    router.post("/nurserypetorder/", nurserypetorder.create);
+    router.post("/nurserypetorder/:size", nurserypetorder.create);
     // Update a memberpet with id
     router.put("/nurserypetorder/:id", nurserypetorder.update);
     // 用member_id取得領養資料

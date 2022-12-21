@@ -15,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
       startTime: {
         type: 'TIMESTAMP',
       },
-      endTime: {
+      endtime: {
         type: 'TIMESTAMP',
       },
       status: {
