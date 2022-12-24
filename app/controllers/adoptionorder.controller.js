@@ -20,9 +20,7 @@ exports.create = (req, res) => {
     number = '000'.substring(0, '000'.length - number.toString().length) + number;
     return letter + number.toString();
   }
-
-  console.log(req.body)
-
+  
   Adoptionorder.findAll({ order:[['adoptionOrderId', 'DESC']],limit:1 })
     .then(data => {
       if(data.length == 0)
@@ -53,13 +51,15 @@ exports.create = (req, res) => {
 
 // Retrieve all Adoptionorders from the database.
 exports.findAll = (req, res) => {
-
-  var condition = { memberId_AO: req.params.id };
+  var condition = null
+  if(req.params.id)
+    condition = { memberId_AO: req.params.id };
 
   Adoptionorder.findAll({ where: condition })
     .then(data => {
-      if(data != [])
+      if(data != []) {
         res.send(data);
+      }
       else
         res.send('nothing')
     })
@@ -75,24 +75,8 @@ exports.findAll = (req, res) => {
 // Update a Adoptionorder by the id in the request
 exports.update = (req, res) => {
 
-  function notNulltoInt(input) {
-    if(input != null)
-      input = parseInt(input, 10);
-    return input;
-  }
-  req.body.preferFigue = notNulltoInt(req.body.preferFigue)
-  req.body.preferAge = notNulltoInt(req.body.preferAge)
-  req.body.preferColor = notNulltoInt(req.body.preferColor)
-  req.body.preferFur = notNulltoInt(req.body.preferFur)
-  req.body.preferGender = notNulltoInt(req.body.preferGender)
-  req.body.preferBreed = notNulltoInt(req.body.preferBreed)
-  req.body.hadPet = notNulltoInt(req.body.hadPet)
-  req.body.hadDiseasePet = notNulltoInt(req.body.hadDiseasePet)
-  req.body.canDiseasePet = notNulltoInt(req.body.canDiseasePet)
-  req.body.haveOtherPet = notNulltoInt(req.body.haveOtherPet)
-
   Adoptionorder.update(req.body, {
-    where: { memberId_ap: req.body.memberId_ap}
+    where: { adoptionOrderId: req.body.adoptionOrderId}
   })
     .then(num => {
       if (num == 1) {

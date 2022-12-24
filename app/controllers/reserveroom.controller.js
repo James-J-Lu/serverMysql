@@ -6,9 +6,9 @@ const Op = db.Sequelize.Op;
 exports.test = (req, res) => {
     // req.body.total = 該房型的總數
     // req.body.size = 現在要查的room size
-    console.log(req.body)
-    var condition = { roomSize: req.body.size, endtime: { [Op.gte]: req.body.time} }
-    
+    // var condition = { roomSize: req.body.size, endtime: { [Op.gte]: req.body.time} }
+    var condition = { roomSize: 1, endtime: { [Op.gte]: "2022-12-20"} }
+
     //取出所有在startTime前還未退房的紀錄
     Reserveroom.findAll({ where: condition })
         .then(data => {
@@ -16,10 +16,7 @@ exports.test = (req, res) => {
         })
         .catch(err => {
             console.log(err + '17')
-            res.status(500).send({
-                message:
-                err.message || "Some error occurred while retrieving Reserverooms."
-            });
+            res.status(500).send(err);
         });
 
     function incrementNumberInString(input) {

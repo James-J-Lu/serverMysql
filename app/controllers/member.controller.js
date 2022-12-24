@@ -50,7 +50,9 @@ exports.logIn = (req, res) => {
   const account = req.body.account;
   var condition = account ? { memberAccount: account } : null;
 
-  console.log(condition)
+  console.log(req.body.account)
+  console.log(req.body.pw)
+  console.log('----------')
 
   Member.findAll({ where: condition })
     .then(data => {
@@ -92,9 +94,10 @@ exports.findOne = (req, res) => {
     });
 };
 
+var count = 0
 // Retrieve all Members from the database.
 exports.findAll = (req, res) => {
-
+  count += 1
   const title = req.query.title;
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
@@ -108,6 +111,8 @@ exports.findAll = (req, res) => {
           err.message || "Some error occurred while retrieving Members."
       });
     });
+
+  console.log(count)
 };
 
 // Update a Member by the id in the request

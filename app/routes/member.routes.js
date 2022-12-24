@@ -67,7 +67,7 @@ module.exports = app => {
     // Retrieve all roominfo
     router.get("/nurserypetorder/", nurserypetorder.findAll);
     // Create a new memberpet
-    router.post("/nurserypetorder/:size", nurserypetorder.create);
+    router.post("/nurserypetorder/", nurserypetorder.create);
     // Update a memberpet with id
     router.put("/nurserypetorder/:id", nurserypetorder.update);
     // 用member_id取得領養資料
