@@ -23,7 +23,10 @@ exports.create = (req, res) => {
 
   Member.findAll({ order:[['memberId', 'DESC']],limit:1 })
     .then(data => {
-      req.body.memberId = incrementNumberInString(data[0].memberId)
+      if(data.length == 0)
+        req.body.memberId = 'M001';
+      else
+        req.body.memberId = incrementNumberInString(data[0].memberId)
       // Save Member in the database
       Member.create(req.body)
         .then(data => {
@@ -50,19 +53,19 @@ exports.logIn = (req, res) => {
   const account = req.body.account;
   var condition = account ? { memberAccount: account } : null;
 
-  console.log(req.body.account)
-  console.log(req.body.pw)
-  console.log('----------')
-
   Member.findAll({ where: condition })
     .then(data => {
-      if(!data[0])
-        res.send('can sign in');
-      else
+      var text
+      if(data.length == 0) {
+        text = 'can sign in'
+      }
+      else if(data.length != 0) {
         if(data[0].memberPassword == req.body.pw)
-          res.send(data[0]);
+          text =data[0]
         else if(data[0].memberPassword != req.body.pw)
-          res.send(false);
+          text = false
+      }
+      res.send(text)
     })
     .catch(err => {
       res.status(500).send({

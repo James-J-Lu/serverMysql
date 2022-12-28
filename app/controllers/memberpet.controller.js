@@ -13,26 +13,54 @@ exports.create = (req, res) => {
     return;
   }
 
-  // Create a Memberpet
-  const _memberpet_ = {
-    id: req.body.id,
-    memberpetAccount: req.body.account,
-    memberpetPw: req.body.pw,
-    memberpetName: req.body.name
-  };
-  
-  // Save Memberpet in the database
-  Memberpet.create(_memberpet_)
+  var Obj = req.body
+
+  function incrementNumberInString(input) {
+    var number = parseInt(input.trim().match(/\d+$/), 10)
+    number++;
+    number = '0000'.substring(0, '0000'.length - number.toString().length) + number;
+    return 'MP' + number.toString();
+  }
+
+  var sent = 'fail'
+  Memberpet.findAll({ order:[['petId', 'DESC']],limit:1 })
     .then(data => {
-      res.send(data);
+      console.log(data.length)
+      if(data.length == 0) {
+        console.log('here')
+        Obj[Obj.length - 1].petId = 'MP0001';
+      }
+      else
+        Obj[Obj.length - 1].petId = incrementNumberInString(data[0].petId)
+      console.log(Obj[Obj.length - 1])
+      // Save Memberpet in the database
+      Memberpet.create(Obj[Obj.length - 1])
+        .then(data => {
+          Obj.pop()
+
+          for(let i = 0; i < Obj.length; i++) {
+            Memberpet.update(Obj[i], { where: { petId: Obj[i].petId } })
+              .then(num => {
+                sent = 'success'
+              })
+              .catch(err => {
+                sent = 'faill'
+              });
+          }
+        })
+        .catch(err => {
+          console.log(err + '32')
+        });
+      
+      res.send(sent);
     })
     .catch(err => {
+      console.log(err + '55')
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Memberpet."
+          err.message || "Some error occurred while retrieving Members."
       });
-    });
-  
+    });  
 };
 
 // Find a single Memberpet with an id
@@ -79,35 +107,21 @@ exports.findAll = (req, res) => {
 
 // Update a Memberpet by the id in the request
 exports.update = (req, res) => {
-  const id = req.params.id;
-
-  const _memberpet_ = {
-    memberpetAccount: req.body.account,
-    memberpetPw: req.body.pw,
-    memberpetName: req.body.name
-  };
-
-  Memberpet.update(_memberpet_, {
-    where: { id: id }
+  if(req.body.petName == null) {
+    res.status(400).send({
+      message: "no pet to create"
+    });
+    return;
+  }
+  
+  Memberpet.update(req.body, {
+    where: { petId: req.body.petId }
   })
     .then(num => {
-      if (num == 1) {
-        console.log(1);
-        res.send({
-          message: "Memberpet was updated successfully."
-        });
-      } else {
-        console.log(0);
-        res.send({
-          message: `Cannot update Memberpet with id=${id}. Maybe Memberpet was not found or req.body is empty!`
-        });
-      }
+      res.send('success');
     })
     .catch(err => {
-      console.log(2);
-      res.status(500).send({
-        message:
-          err.message || "Error updating Memberpet with id=" + id
-      });
+      console.log(err + '106')
+      res.send('fail');
     });
 };

@@ -13,26 +13,40 @@ exports.create = (req, res) => {
     return;
   }
 
-  // Create a Adoptionpet
-  const _adoptionpet_ = {
-    id: req.body.id,
-    adoptionpetAccount: req.body.account,
-    adoptionpetPw: req.body.pw,
-    adoptionpetName: req.body.name
-  };
-  
-  // Save Adoptionpet in the database
-  Adoptionpet.create(_adoptionpet_)
+  function incrementNumberInString(input) {
+    var number = parseInt(input.trim().match(/\d+$/), 10)
+    number++;
+    number = '0000'.substring(0, '0000'.length - number.toString().length) + number;
+    return 'AP' + number.toString();
+  }
+
+  Adoptionpet.findAll({ order:[['adoPetId', 'DESC']],limit:1 })
     .then(data => {
-      res.send(data);
+      if(data.length == 0)
+        req.body.adoPetId = 'AP0001';
+      else
+        req.body.adoPetId = incrementNumberInString(data[0].adoPetId)
+
+      // Save Adoptionpet in the database
+      Adoptionpet.create(req.body)
+        .then(data => {
+          res.send('success');
+        })
+        .catch(err => {
+          console.log(err + '33')
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the Adoptionpet."
+          });
+      });
     })
     .catch(err => {
+      console.log(err + '41')
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Adoptionpet."
+          err.message || "Some error occurred while retrieving Members."
       });
     });
-  
 };
 
 // Find a single Adoptionpet with an id
@@ -64,7 +78,7 @@ exports.findAll = (req, res) => {
     if(obj[1] == 0)
       delete req.body[obj[0]]
   })
-  console.log(req.body)
+
   var condition = req.body;
 
   Adoptionpet.findAll({ where: condition })

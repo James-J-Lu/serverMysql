@@ -31,6 +31,9 @@ module.exports = (sequelize, Sequelize) => {
       dietaryHabit: {
         type: Sequelize.STRING,
       },
+      img: {
+        type: Sequelize.TEXT('medium')
+      }
     });
   
     return Memberpet;

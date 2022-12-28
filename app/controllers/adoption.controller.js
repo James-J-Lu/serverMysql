@@ -13,26 +13,40 @@ exports.create = (req, res) => {
     return;
   }
 
-  // Create a Adoption
-  const _adoption_ = {
-    id: req.body.id,
-    adoptionAccount: req.body.account,
-    adoptionPw: req.body.pw,
-    adoptionName: req.body.name
-  };
+  function incrementNumberInString(input) {
+    var number = parseInt(input.trim().match(/\d+$/), 10)
+    number++;
+    number = '000'.substring(0, '000'.length - number.toString().length) + number;
+    return 'AM' + number.toString();
+  }
   
-  // Save Adoption in the database
-  Adoption.create(_adoption_)
+  Adoption.findAll({ order:[['adoptionId', 'DESC']],limit:1 })
     .then(data => {
-      res.send(data);
+      if(data.length == 0)
+        req.body.adoptionId = 'AM003';
+      else
+        req.body.adoptionId = incrementNumberInString(data[0].adoptionId);
+      
+      // Save Adoption in the database
+      Adoption.create(req.body)
+        .then(data => {
+          res.send(data);
+        })
+        .catch(err => {
+          console.log(err)
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while creating the Adoption."
+          });
+        });
     })
     .catch(err => {
+      console.log(err + '45')
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Adoption."
+          err.message || "Some error occurred while retrieving Members."
       });
     });
-  
 };
 
 // Retrieve all Adoptions from the database.

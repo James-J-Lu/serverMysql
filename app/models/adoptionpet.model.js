@@ -42,6 +42,9 @@ module.exports = (sequelize, Sequelize) => {
       status: {
         type: Sequelize.INTEGER
       },
+      img: {
+        type: Sequelize.TEXT('medium')
+      }
     });
   
     return Adoptionpet;

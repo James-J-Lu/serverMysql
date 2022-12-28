@@ -3,6 +3,22 @@ const db = require("../models");
 const Roominfo = db.roominfo;
 const Op = db.Sequelize.Op;
 
+exports.allroom = (req, res) => {
+  var condition = {roomSpace: req.params.size}
+
+  Roominfo.findAll({ where: condition })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      console.log(err + '12')
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Roominfos."
+      });
+    });
+}
+
 // Create and Save a new Roominfo
 exports.create = (req, res) => {
   // Validate request

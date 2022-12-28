@@ -6,19 +6,11 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Nurserypetorder
 exports.create = (req, res) => {
   // Validate request
-  // if (!req) {
-  //   res.status(400).send({
-  //     message: "Content can not be empty!"
-  //   });
-  //   return;
-  // }
-  req.body = {
-    nurseryPetOrderId: null,
-    memberId_NPO: 'M002',
-    petId_NPO: 'MP0003',
-    roomId_NPO: 'R008',
-    startTime: '2022-11-03',
-    endTime: '2022-12-03',
+  if (!req) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+    return;
   }
 
   function incrementNumberInString(input) {
@@ -27,13 +19,13 @@ exports.create = (req, res) => {
     number = '0000'.substring(0, '0000'.length - number.toString().length) + number;
     return 'NPO' + number.toString();
   }
-
-  // if(req.params.size == 1)
-  //   req.body.roomId_NPO = 'R003'
-  // else  if(req.params.size == 2)
-  //   req.body.roomId_NPO = 'R006'
-  // else  if(req.params.size == 3)
-  //   req.body.roomId_NPO = 'R009'
+  console.log(req.params.size)
+  if(req.params.size == 1)
+    req.body.roomId_NPO = 'R003'
+  else  if(req.params.size == 2)
+    req.body.roomId_NPO = 'R006'
+  else  if(req.params.size == 3)
+    req.body.roomId_NPO = 'R009'
 
   Nurserypetorder.findAll({ order:[['nurseryPetOrderId', 'DESC']],limit:1 })
     .then(data => {

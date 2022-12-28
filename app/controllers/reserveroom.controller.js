@@ -4,11 +4,8 @@ const Reserveroom = db.reserveroom;
 const Op = db.Sequelize.Op;
 
 exports.test = (req, res) => {
-    // req.body.total = 該房型的總數
-    // req.body.size = 現在要查的room size
-    // var condition = { roomSize: req.body.size, endtime: { [Op.gte]: req.body.time} }
-    var condition = { roomSize: 1, endtime: { [Op.gte]: "2022-12-20"} }
-
+    
+    var condition = { roomSize: req.body.size, endtime: { [Op.gte]: req.body.time}, status: {[Op.ne]: 0} }
     //取出所有在startTime前還未退房的紀錄
     Reserveroom.findAll({ where: condition })
         .then(data => {
@@ -26,7 +23,7 @@ exports.test = (req, res) => {
         for(var i = 0; i < NotCheckout.length; i++) {
             var time1 = NotCheckout[i].startTime
 
-            while(time1 <= NotCheckout[i].endTime) {
+            while(time1 <= NotCheckout[i].endtime) {
                 if(!Timelist[time1])
                     Timelist[time1] = 1
                 else
@@ -35,6 +32,7 @@ exports.test = (req, res) => {
                 time1 = time1.split('-')[0] + '-' + time1.split('-')[1] + '-' + (Number(time1.split('-')[2]) + 1).toString()
             }
         }
+        
         return Timelist;
     }
 

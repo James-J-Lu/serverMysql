@@ -22,8 +22,8 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
-      manager: {
-        type: Sequelize.INTEGER,
+      managerId: {
+        type: Sequelize.STRING,
         defaultValue: 0
       },
       roomSize: {

@@ -61,13 +61,15 @@ module.exports = app => {
     router.post("/roominfo/", roominfo.create);
     // Update a memberpet with id
     router.put("/roominfo/:id", roominfo.update);
+    // get all room
+    router.get("/roominfo/allroom/:size", roominfo.allroom);
     
 
 // 房間資訊，管理者房間，可能會用在托兒訂單
     // Retrieve all roominfo
     router.get("/nurserypetorder/", nurserypetorder.findAll);
     // Create a new memberpet
-    router.post("/nurserypetorder/", nurserypetorder.create);
+    router.post("/nurserypetorder/:size", nurserypetorder.create);
     // Update a memberpet with id
     router.put("/nurserypetorder/:id", nurserypetorder.update);
     // 用member_id取得領養資料

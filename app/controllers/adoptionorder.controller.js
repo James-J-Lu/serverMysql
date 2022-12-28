@@ -6,6 +6,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Adoptionorder
 exports.create = (req, res) => {
   // Validate request
+
   if (!req) {
     res.status(400).send({
       message: "Content can not be empty!"
@@ -17,8 +18,8 @@ exports.create = (req, res) => {
     var number = parseInt(input.trim().match(/\d+$/), 10),
         letter = input.trim().match(/^[A-Za-z]/)[0];
     number++;
-    number = '000'.substring(0, '000'.length - number.toString().length) + number;
-    return letter + number.toString();
+    number = '0000'.substring(0, '0000'.length - number.toString().length) + number;
+    return 'AO' + number.toString();
   }
   
   Adoptionorder.findAll({ order:[['adoptionOrderId', 'DESC']],limit:1 })
